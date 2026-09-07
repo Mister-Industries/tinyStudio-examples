@@ -1,0 +1,12 @@
+[
+  {
+    "title": "tinySniff: Using the Button and Buzzer",
+    "description": "The Basic Demo plus the two parts of the HAT it ignores: the button and the buzzer.",
+    "owner": "Mister-Industries",
+    "repo": "tinySniff",
+    "path": "Software/Arduino/Examples/tinySniff_ButtonBuzzer",
+    "board": "tinyCore + tinySniff HAT",
+    "category": "hats",
+    "docsUrl": "https://tinydocs.cc/3_tiny-hats/tinysniff/example-code/"
+  }
+]
