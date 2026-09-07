@@ -95,7 +95,7 @@ void listSFXFiles() {
     if (sfxFiles.empty()) {
         Serial.println("No .mp3 or .wav files found in SD root.");
     } else {
-        Serial.printf("%d file(s) loaded. Current: %s\\n",
+        Serial.printf("%d file(s) loaded. Current: %s\n",
                       sfxFiles.size(), sfxFiles[currentFileIndex].c_str());
     }
 }
@@ -122,7 +122,7 @@ void nextTrack() {
 // ---------------------------------------------------------------
 
 void printMenu() {
-    Serial.println("\\n--- tinySoundboard Menu ---");
+    Serial.println("\n--- tinySoundboard Menu ---");
     Serial.println("[Button]  Play Current Sound");
     Serial.println("[s] / [p] Play Current Sound");
     Serial.println("[n]  Next Sound Effect");
@@ -130,9 +130,9 @@ void printMenu() {
     Serial.println("[-]  Volume Down");
     Serial.println("[l]  List Sound Files");
     Serial.println("[?]  Show Menu");
-    Serial.printf( "Current volume: %d / 21\\n", volume);
+    Serial.printf( "Current volume: %d / 21\n", volume);
     if (!sfxFiles.empty())
-        Serial.printf("Current file: %s\\n", sfxFiles[currentFileIndex].c_str());
+        Serial.printf("Current file: %s\n", sfxFiles[currentFileIndex].c_str());
     Serial.println("---------------------------");
 }
 
@@ -203,7 +203,7 @@ void loop() {
 
     // Serial Commands
     if (Serial.available()) {
-        String input = Serial.readStringUntil('\\n');
+        String input = Serial.readStringUntil('\n');
         input.trim();
         if (input.length() == 0) return;
 
@@ -216,12 +216,12 @@ void loop() {
             case '+':
                 volume = constrain(volume + 1, 0, 21);
                 audio.setVolume(volume);
-                Serial.printf("Volume: %d / 21\\n", volume);
+                Serial.printf("Volume: %d / 21\n", volume);
                 break;
             case '-':
                 volume = constrain(volume - 1, 0, 21);
                 audio.setVolume(volume);
-                Serial.printf("Volume: %d / 21\\n", volume);
+                Serial.printf("Volume: %d / 21\n", volume);
                 break;
         }
     }

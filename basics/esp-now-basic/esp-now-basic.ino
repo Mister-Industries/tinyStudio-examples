@@ -20,9 +20,16 @@ void onSent(const uint8_t *mac, esp_now_send_status_t status) {
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivered" : "Failed");
 }
 
-// Called when data is received
-void onReceive(const uint8_t *mac, const uint8_t *data, int len) {
-  Serial.print("Received: ");
+// Called when data is received.
+// Note the first argument: since Arduino-ESP32 3.0 the receive callback gets an
+// esp_now_recv_info_t* (which carries the sender's address in src_addr), not a
+// bare MAC pointer. Older tutorials still show the 2.x signature and won't compile.
+void onReceive(const esp_now_recv_info_t *info, const uint8_t *data, int len) {
+  Serial.print("Received from ");
+  for (int i = 0; i < 6; i++) {
+    Serial.printf("%02X%s", info->src_addr[i], i < 5 ? ":" : " ");
+  }
+  Serial.print("- ");
   Serial.write(data, len);
   Serial.println();
 }
@@ -36,7 +43,7 @@ void setup() {
   esp_now_register_recv_cb(onReceive);
 
   // Register the peer
-  esp_now_peer_info_t peer;
+  esp_now_peer_info_t peer = {};   // zero it — stale fields make add_peer fail
   memcpy(peer.peer_addr, peerAddress, 6);
   peer.channel = 0;
   peer.encrypt = false;

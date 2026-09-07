@@ -12,49 +12,47 @@
 // Interactive Buzzer Control
 
 const int buzzerPin = 2;
-const int pwmChannel = 0;
 const int resolution = 8;
 
 void setup() {
   Serial.begin(115200);
-  ledcSetup(pwmChannel, 2000, resolution);
-  ledcAttachPin(buzzerPin, pwmChannel);
+  ledcAttach(buzzerPin, 2000, resolution);
 
   Serial.println("=== Interactive Buzzer Control ===");
   Serial.println("Type letters to make sounds:");
   Serial.println("a-g = Musical notes");
   Serial.println("s = Siren");
-  Serial.println("b = Beep");
+  Serial.println("p = Beep");
   Serial.println("r = R2D2 sound");
   Serial.println("x = Stop sound");
 }
 
 void playNote(int frequency, int duration) {
-  ledcWriteTone(pwmChannel, frequency);
+  ledcWriteTone(buzzerPin, frequency);
   delay(duration);
-  ledcWriteTone(pwmChannel, 0);
+  ledcWriteTone(buzzerPin, 0);
 }
 
 void playSiren() {
   for (int freq = 400; freq < 2000; freq += 50) {
-    ledcWriteTone(pwmChannel, freq);
+    ledcWriteTone(buzzerPin, freq);
     delay(20);
   }
   for (int freq = 2000; freq > 400; freq -= 50) {
-    ledcWriteTone(pwmChannel, freq);
+    ledcWriteTone(buzzerPin, freq);
     delay(20);
   }
-  ledcWriteTone(pwmChannel, 0);
+  ledcWriteTone(buzzerPin, 0);
 }
 
 void playR2D2() {
   for (int i = 0; i < 5; i++) {
-    ledcWriteTone(pwmChannel, 1000 + (i * 200));
+    ledcWriteTone(buzzerPin, 1000 + (i * 200));
     delay(100);
-    ledcWriteTone(pwmChannel, 800 - (i * 100));
+    ledcWriteTone(buzzerPin, 800 - (i * 100));
     delay(100);
   }
-  ledcWriteTone(pwmChannel, 0);
+  ledcWriteTone(buzzerPin, 0);
 }
 
 void loop() {
@@ -80,14 +78,14 @@ void loop() {
         playR2D2();
         break;
 
-      case 'b':
+      case 'p':
         Serial.println("📢 Beep!");
         playNote(1000, 200);
         break;
 
       case 'x':
         Serial.println("🔇 Stopping sound");
-        ledcWriteTone(pwmChannel, 0);
+        ledcWriteTone(buzzerPin, 0);
         break;
 
       default:

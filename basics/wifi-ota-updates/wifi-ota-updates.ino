@@ -11,19 +11,19 @@
 
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
-#include <AsyncElegantOTA.h>
+#include <ElegantOTA.h>
 
 AsyncWebServer server(80);
 
 void setup() {
     // WiFi setup...
 
-    // Enable OTA updates
-    AsyncElegantOTA.begin(&server);
+    // Enable OTA updates — browse to http://<board-ip>/update
+    ElegantOTA.begin(&server);
 
     server.begin();
 }
 
 void loop() {
-    // OTA updates handled automatically
+    ElegantOTA.loop();
 }

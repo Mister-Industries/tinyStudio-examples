@@ -162,7 +162,7 @@ void setupESPNOW() {
         return;
     }
 
-    Serial.printf("ESP-NOW ready on channel %d\\n", wifiChannel);
+    Serial.printf("ESP-NOW ready on channel %d\n", wifiChannel);
 }
 
 void changeChannel(int newChan) {
@@ -173,7 +173,7 @@ void changeChannel(int newChan) {
     esp_wifi_set_channel(wifiChannel, WIFI_SECOND_CHAN_NONE);
     esp_wifi_set_promiscuous(false);
     setupESPNOW();
-    Serial.printf("Switched to channel %d\\n", wifiChannel);
+    Serial.printf("Switched to channel %d\n", wifiChannel);
 }
 
 // ---------------------------------------------------------------
@@ -188,13 +188,13 @@ void stopTalking()  { isTalking = false; Serial.println("Listening..."); }
 // ---------------------------------------------------------------
 
 void printMenu() {
-    Serial.println("\\n--- tinyWalkieTalkie Menu ---");
+    Serial.println("\n--- tinyWalkieTalkie Menu ---");
     Serial.println("[Hold RX 150ms] Start Talking");
     Serial.println("[Release RX]    Stop Talking (after 200ms)");
     Serial.println("[t]  Toggle Talk via Serial");
     Serial.println("[c]  Cycle Channel (1-11)");
     Serial.println("[?]  Show Menu");
-    Serial.printf( "Current Channel: %d\\n", wifiChannel);
+    Serial.printf( "Current Channel: %d\n", wifiChannel);
     Serial.println("-----------------------------");
 }
 
@@ -218,7 +218,7 @@ void setup() {
 void loop() {
     // 1. Serial Commands
     if (Serial.available()) {
-        String input = Serial.readStringUntil('\\n');
+        String input = Serial.readStringUntil('\n');
         input.trim();
         if (input.length() == 0) return;
 

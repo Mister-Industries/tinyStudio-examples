@@ -213,7 +213,7 @@ void stopSpeaking() {
 // ---------------------------------------------------------------
 
 void printMenu() {
-    Serial.println("\\n--- tinyRecorder Menu ---");
+    Serial.println("\n--- tinyRecorder Menu ---");
     Serial.println("[Hold RX]    Start Recording");
     Serial.println("[Release RX] Stop & Save");
     Serial.println("[r]  Toggle Recording via Serial");
@@ -245,7 +245,7 @@ void setup() {
             case CARD_SDHC: Serial.println("SDHC");  break;
             default:        Serial.println("Unknown");
         }
-        Serial.printf("SD size: %llu MB\\n", SD.cardSize() / (1024 * 1024));
+        Serial.printf("SD size: %llu MB\n", SD.cardSize() / (1024 * 1024));
     }
 
     audio.setPinout(I2S_SPKR_BCLK, I2S_SPKR_LRC, I2S_SPKR_DOUT);
@@ -285,7 +285,7 @@ void loop() {
     lastButtonState = reading;
 
     if (Serial.available()) {
-        String input = Serial.readStringUntil('\\n');
+        String input = Serial.readStringUntil('\n');
         input.trim();
 
         if (input.length() == 0) return;

@@ -12,7 +12,6 @@
 // Musical Scale with Buzzer
 
 const int buzzerPin = 2;
-const int pwmChannel = 0;
 const int resolution = 8;
 
 // Musical note frequencies (in Hz)
@@ -27,20 +26,19 @@ const int NOTE_C5 = 523;
 
 void setup() {
   Serial.begin(115200);
-  ledcSetup(pwmChannel, 2000, resolution);
-  ledcAttachPin(buzzerPin, pwmChannel);
+  ledcAttach(buzzerPin, 2000, resolution);
 
   Serial.println("Playing musical scale...");
 }
 
 void playNote(int frequency, int duration) {
   if (frequency > 0) {
-    ledcWriteTone(pwmChannel, frequency);
+    ledcWriteTone(buzzerPin, frequency);
   } else {
-    ledcWriteTone(pwmChannel, 0);  // Rest (silence)
+    ledcWriteTone(buzzerPin, 0);  // Rest (silence)
   }
   delay(duration);
-  ledcWriteTone(pwmChannel, 0);  // Stop sound
+  ledcWriteTone(buzzerPin, 0);  // Stop sound
   delay(50);  // Small pause between notes
 }
 

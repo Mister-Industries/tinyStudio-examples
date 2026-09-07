@@ -105,7 +105,7 @@ void beep(unsigned int freq, unsigned long ms) {
 float toMv(int raw) { return (raw / ADC_MAX) * VCC * 1000.0f; }
 
 void printMenu() {
-    Serial.println("\\n--- Button and Buzzer Menu ---");
+    Serial.println("\n--- Button and Buzzer Menu ---");
     Serial.println("[r]  Single reading");
     Serial.println("[u]  Toggle units: raw ADC or millivolts");
     Serial.println("[a]  Toggle the audible alert");
@@ -120,10 +120,10 @@ void printMenu() {
 
 void printReading(int ch4, int h2s, int co) {
     if (showMv) {
-        Serial.printf("CH4_mV:%.1f,H2S_mV:%.1f,CO_mV:%.1f\\n",
+        Serial.printf("CH4_mV:%.1f,H2S_mV:%.1f,CO_mV:%.1f\n",
             toMv(ch4), toMv(h2s), toMv(co));
     } else {
-        Serial.printf("CH4:%d,H2S:%d,CO:%d\\n", ch4, h2s, co);
+        Serial.printf("CH4:%d,H2S:%d,CO:%d\n", ch4, h2s, co);
     }
 }
 
@@ -183,11 +183,11 @@ void loop() {
                 break;
             case 'u':
                 showMv = !showMv;
-                Serial.printf("Units: %s\\n", showMv ? "millivolts" : "raw ADC");
+                Serial.printf("Units: %s\n", showMv ? "millivolts" : "raw ADC");
                 break;
             case 'a':
                 alertEnabled = !alertEnabled;
-                Serial.printf("Audible alert: %s\\n", alertEnabled ? "ON" : "OFF");
+                Serial.printf("Audible alert: %s\n", alertEnabled ? "ON" : "OFF");
                 beep(alertEnabled ? TONE_ON : TONE_OFF, BEEP_MS);
                 break;
             case 'b':

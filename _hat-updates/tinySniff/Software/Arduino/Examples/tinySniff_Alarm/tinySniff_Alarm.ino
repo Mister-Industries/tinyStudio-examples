@@ -138,9 +138,9 @@ void connectWiFi() {
         attempts++;
     }
     if (WiFi.status() == WL_CONNECTED) {
-        Serial.printf("\\nConnected! IP: %s\\n", WiFi.localIP().toString().c_str());
+        Serial.printf("\nConnected! IP: %s\n", WiFi.localIP().toString().c_str());
     } else {
-        Serial.println("\\n[WARN] WiFi connection failed. Will retry.");
+        Serial.println("\n[WARN] WiFi connection failed. Will retry.");
     }
 }
 
@@ -159,7 +159,7 @@ void sendAlertEmail(const char* gasName, float reading, int threshold) {
         return;
     }
 
-    Serial.printf("[Email] Sending alert for %s...\\n", gasName);
+    Serial.printf("[Email] Sending alert for %s...\n", gasName);
 
     // Configure SMTP session
     Session_Config config;
@@ -178,11 +178,11 @@ void sendAlertEmail(const char* gasName, float reading, int threshold) {
 
     char body[256];
     snprintf(body, sizeof(body),
-        "tinySniff Gas Alert\\n\\n"
-        "Sensor:    %s\\n"
-        "Reading:   %.1f (supersampled avg of %d reads)\\n"
-        "Threshold: %d\\n\\n"
-        "Device is monitoring. Next alert for this channel\\n"
+        "tinySniff Gas Alert\n\n"
+        "Sensor:    %s\n"
+        "Reading:   %.1f (supersampled avg of %d reads)\n"
+        "Threshold: %d\n\n"
+        "Device is monitoring. Next alert for this channel\n"
         "will not be sent for %d seconds.",
         gasName, reading, SUPERSAMPLE_COUNT, threshold, ALERT_COOLDOWN_MS / 1000);
 
@@ -193,13 +193,13 @@ void sendAlertEmail(const char* gasName, float reading, int threshold) {
     smtp.callback(smtpCallback);
 
     if (!smtp.connect(&config)) {
-        Serial.printf("[Email] Connection failed: %s\\n", smtp.errorReason().c_str());
+        Serial.printf("[Email] Connection failed: %s\n", smtp.errorReason().c_str());
         return;
     }
     if (!MailClient.sendMail(&smtp, &message)) {
-        Serial.printf("[Email] Send failed: %s\\n", smtp.errorReason().c_str());
+        Serial.printf("[Email] Send failed: %s\n", smtp.errorReason().c_str());
     } else {
-        Serial.printf("[Email] Alert sent: %s reading=%.1f\\n", gasName, reading);
+        Serial.printf("[Email] Alert sent: %s reading=%.1f\n", gasName, reading);
     }
     smtp.closeSession();
 }
@@ -214,7 +214,7 @@ void checkAlarms() {
     float co  = supersample(PIN_CO);
     unsigned long now = millis();
 
-    Serial.printf("[Monitor] CH4:%.1f  H2S:%.1f  CO:%.1f  (armed: %s)\\n",
+    Serial.printf("[Monitor] CH4:%.1f  H2S:%.1f  CO:%.1f  (armed: %s)\n",
         ch4, h2s, co, alarmArmed ? "YES" : "NO");
 
     if (!alarmArmed) return;
@@ -241,21 +241,21 @@ void checkAlarms() {
 // ---------------------------------------------------------------
 
 void printThresholds() {
-    Serial.println("\\n--- Active Thresholds ---");
-    Serial.printf("  CH4 (Methane):           %d / 4095\\n", THRESHOLD_CH4);
-    Serial.printf("  H2S (Hydrogen Sulfide):  %d / 4095\\n", THRESHOLD_H2S);
-    Serial.printf("  CO  (Carbon Monoxide):   %d / 4095\\n", THRESHOLD_CO);
-    Serial.printf("  Supersample count:       %d reads/check\\n", SUPERSAMPLE_COUNT);
+    Serial.println("\n--- Active Thresholds ---");
+    Serial.printf("  CH4 (Methane):           %d / 4095\n", THRESHOLD_CH4);
+    Serial.printf("  H2S (Hydrogen Sulfide):  %d / 4095\n", THRESHOLD_H2S);
+    Serial.printf("  CO  (Carbon Monoxide):   %d / 4095\n", THRESHOLD_CO);
+    Serial.printf("  Supersample count:       %d reads/check\n", SUPERSAMPLE_COUNT);
     Serial.println("  Edit #define THRESHOLD_xxx to adjust.");
     Serial.println("-------------------------");
 }
 
 void printMenu() {
-    Serial.println("\\n--- Text Notifications Menu ---");
-    Serial.printf("  WiFi:     %s\\n",
+    Serial.println("\n--- Text Notifications Menu ---");
+    Serial.printf("  WiFi:     %s\n",
         WiFi.status() == WL_CONNECTED ? WiFi.localIP().toString().c_str() : "Not connected");
-    Serial.printf("  Alarm:    %s\\n", alarmArmed ? "ARMED" : "DISARMED");
-    Serial.printf("  Alerting: %s\\n", ALERT_RECIPIENT_EMAIL);
+    Serial.printf("  Alarm:    %s\n", alarmArmed ? "ARMED" : "DISARMED");
+    Serial.printf("  Alerting: %s\n", ALERT_RECIPIENT_EMAIL);
     Serial.println("[t]  Print thresholds");
     Serial.println("[s]  Print current sensor readings");
     Serial.println("[a]  Toggle alarm armed / disarmed");
@@ -313,19 +313,19 @@ void loop() {
                 printThresholds();
                 break;
             case 's':
-                Serial.printf("CH4:%.1f  H2S:%.1f  CO:%.1f\\n",
+                Serial.printf("CH4:%.1f  H2S:%.1f  CO:%.1f\n",
                     supersample(PIN_CH4), supersample(PIN_H2S), supersample(PIN_CO));
                 break;
             case 'a':
                 alarmArmed = !alarmArmed;
-                Serial.printf("Alarm %s\\n", alarmArmed ? "ARMED" : "DISARMED");
+                Serial.printf("Alarm %s\n", alarmArmed ? "ARMED" : "DISARMED");
                 break;
             case 'e':
                 Serial.println("Sending test email...");
                 sendAlertEmail("TEST (ignore this)", 0.0f, 0);
                 break;
             case 'w':
-                Serial.printf("WiFi: %s  RSSI: %d dBm\\n",
+                Serial.printf("WiFi: %s  RSSI: %d dBm\n",
                     WiFi.status() == WL_CONNECTED
                         ? WiFi.localIP().toString().c_str()
                         : "disconnected",
@@ -346,7 +346,7 @@ void loop() {
             buttonState = reading;
             if (buttonState == LOW) {
                 alarmArmed = !alarmArmed;
-                Serial.printf("Alarm %s\\n", alarmArmed ? "ARMED" : "DISARMED");
+                Serial.printf("Alarm %s\n", alarmArmed ? "ARMED" : "DISARMED");
             }
         }
     }

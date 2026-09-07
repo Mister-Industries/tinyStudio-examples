@@ -89,15 +89,15 @@ String serialPrompt(const char* label, bool mask = false) {
     while (true) {
         if (Serial.available()) {
             char c = Serial.read();
-            if (c == '\\n' || c == '\\r') {
+            if (c == '\n' || c == '\r') {
                 if (result.length() > 0) {
                     Serial.println();
                     return result;
                 }
-            } else if (c == 127 || c == '\\b') {
+            } else if (c == 127 || c == '\b') {
                 if (result.length() > 0) {
                     result.remove(result.length() - 1);
-                    Serial.print("\\b \\b");
+                    Serial.print("\b \b");
                 }
             } else {
                 result += c;
@@ -139,8 +139,8 @@ bool configIsComplete() {
 }
 
 void runConfigWizard() {
-    Serial.println("\\n=== tinyAI Configuration ===");
-    Serial.println("Press Enter to keep the current value.\\n");
+    Serial.println("\n=== tinyAI Configuration ===");
+    Serial.println("Press Enter to keep the current value.\n");
 
     String prompt_ssid = "WiFi SSID";
     if (cfg_ssid.length() > 0) prompt_ssid += " [" + cfg_ssid + "]";
@@ -173,12 +173,12 @@ void runConfigWizard() {
     if (new_vid.length() > 0) cfg_voice_id = new_vid;
 
     if (!configIsComplete()) {
-        Serial.println("\\n[ERROR] All fields are required. Config not saved.");
+        Serial.println("\n[ERROR] All fields are required. Config not saved.");
         return;
     }
 
     saveConfig();
-    Serial.println("\\n[OK] Config saved to flash.");
+    Serial.println("\n[OK] Config saved to flash.");
 }
 
 // ---------------------------------------------------------------
@@ -186,20 +186,20 @@ void runConfigWizard() {
 // ---------------------------------------------------------------
 
 bool connectWiFi() {
-    Serial.printf("Connecting to \\"%s\\"", cfg_ssid.c_str());
+    Serial.printf("Connecting to \"%s\"", cfg_ssid.c_str());
     WiFi.disconnect(true);
     WiFi.begin(cfg_ssid.c_str(), cfg_password.c_str());
 
     unsigned long start = millis();
     while (WiFi.status() != WL_CONNECTED) {
         if (millis() - start > 15000) {
-            Serial.println("\\n[ERROR] WiFi connection timed out.");
+            Serial.println("\n[ERROR] WiFi connection timed out.");
             return false;
         }
         delay(500);
         Serial.print(".");
     }
-    Serial.println("\\nWiFi Connected.");
+    Serial.println("\nWiFi Connected.");
     Serial.print("IP: "); Serial.println(WiFi.localIP());
     return true;
 }
@@ -209,7 +209,7 @@ bool connectWiFi() {
 // ---------------------------------------------------------------
 
 void printMenu() {
-    Serial.println("\\n--- tinyAI_Voice_EL Menu ---");
+    Serial.println("\n--- tinyAI_Voice_EL Menu ---");
     Serial.println("[Hold RX] Start Recording");
     Serial.println("[Release RX] Stop & Process");
     Serial.println("[r]  Toggle Recording via Serial");
@@ -344,8 +344,8 @@ String transcribeAudio() {
         return "";
     }
 
-    String head = "--" + boundary + "\\r\\nContent-Disposition: form-data; name=\\"file\\"; filename=\\"rec.wav\\"\\r\\nContent-Type: audio/wav\\r\\n\\r\\n";
-    String tail = "\\r\\n--" + boundary + "\\r\\nContent-Disposition: form-data; name=\\"model\\"\\r\\n\\r\\nwhisper-1\\r\\n--" + boundary + "--\\r\\n";
+    String head = "--" + boundary + "\r\nContent-Disposition: form-data; name=\"file\"; filename=\"rec.wav\"\r\nContent-Type: audio/wav\r\n\r\n";
+    String tail = "\r\n--" + boundary + "\r\nContent-Disposition: form-data; name=\"model\"\r\n\r\nwhisper-1\r\n--" + boundary + "--\r\n";
 
     File f = SD.open("/rec.wav");
     if (!f) { Serial.println("[ERROR] Could not open /rec.wav"); return ""; }
@@ -421,7 +421,7 @@ String getChatResponse(String text) {
         reply = resDoc["choices"][0]["message"]["content"].as<String>();
         Serial.print("AI Reply: "); Serial.println(reply);
     } else {
-        Serial.printf("[ERROR] ChatGPT request failed: %d\\n", code);
+        Serial.printf("[ERROR] ChatGPT request failed: %d\n", code);
         Serial.println(https.getString());
     }
 
@@ -473,7 +473,7 @@ void playElevenLabs(String text) {
             Serial.println("[ERROR] Could not open /tts.mp3 for writing.");
         }
     } else {
-        Serial.printf("[ERROR] ElevenLabs request failed: %d\\n", code);
+        Serial.printf("[ERROR] ElevenLabs request failed: %d\n", code);
         Serial.println(https.getString());
     }
 
@@ -506,7 +506,7 @@ void setup() {
             case CARD_SDHC: Serial.println("SDHC");  break;
             default:        Serial.println("Unknown");
         }
-        Serial.printf("SD size: %llu MB\\n", SD.cardSize() / (1024 * 1024));
+        Serial.printf("SD size: %llu MB\n", SD.cardSize() / (1024 * 1024));
     }
 
     audio.setPinout(I2S_SPKR_BCLK, I2S_SPKR_LRC, I2S_SPKR_DOUT);
@@ -516,7 +516,7 @@ void setup() {
     loadConfig();
 
     if (!configIsComplete()) {
-        Serial.println("\\n[SETUP] No configuration found. Let's get you set up!");
+        Serial.println("\n[SETUP] No configuration found. Let's get you set up!");
         runConfigWizard();
     }
 
@@ -549,7 +549,7 @@ void loop() {
     lastButtonState = reading;
 
     if (Serial.available()) {
-        String input = Serial.readStringUntil('\\n');
+        String input = Serial.readStringUntil('\n');
         input.trim();
         if (input.length() == 0) return;
 

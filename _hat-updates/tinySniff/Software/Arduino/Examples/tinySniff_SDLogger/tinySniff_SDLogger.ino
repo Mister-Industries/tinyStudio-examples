@@ -140,13 +140,13 @@ String nextLogFileName() {
 bool openLogFile(const String& fileName) {
     logFile = SD.open(fileName, FILE_WRITE);
     if (!logFile) {
-        Serial.printf("[ERROR] Could not open %s\\n", fileName.c_str());
+        Serial.printf("[ERROR] Could not open %s\n", fileName.c_str());
         return false;
     }
     // CSV header
     logFile.println("Millis_ms,CH4_avg,CH4_ema,H2S_avg,H2S_ema,CO_avg,CO_ema");
     logFile.flush();
-    Serial.printf("Logging to: %s\\n", fileName.c_str());
+    Serial.printf("Logging to: %s\n", fileName.c_str());
     return true;
 }
 
@@ -155,12 +155,12 @@ bool openLogFile(const String& fileName) {
 // ---------------------------------------------------------------
 
 void printMenu() {
-    Serial.println("\\n--- SD Card Logger Menu ---");
-    Serial.printf("  File:       %s\\n", logFileName.c_str());
-    Serial.printf("  Entries:    %lu\\n", entryCount);
-    Serial.printf("  Status:     %s\\n", loggingPaused ? "PAUSED" : "LOGGING");
-    Serial.printf("  Supersamp:  %d reads/entry\\n", SUPERSAMPLE_COUNT);
-    Serial.printf("  EMA alpha:  %.2f\\n", EMA_ALPHA);
+    Serial.println("\n--- SD Card Logger Menu ---");
+    Serial.printf("  File:       %s\n", logFileName.c_str());
+    Serial.printf("  Entries:    %lu\n", entryCount);
+    Serial.printf("  Status:     %s\n", loggingPaused ? "PAUSED" : "LOGGING");
+    Serial.printf("  Supersamp:  %d reads/entry\n", SUPERSAMPLE_COUNT);
+    Serial.printf("  EMA alpha:  %.2f\n", EMA_ALPHA);
     Serial.println("[s]  Flush buffer to card now");
     Serial.println("[p]  Print last 10 entries");
     Serial.println("[n]  Start a new log file");
@@ -179,10 +179,10 @@ void printLastEntries(int n) {
     if (!f) { Serial.println("[ERROR] Could not read file."); return; }
 
     std::vector<String> lines;
-    while (f.available()) lines.push_back(f.readStringUntil('\\n'));
+    while (f.available()) lines.push_back(f.readStringUntil('\n'));
     f.close();
 
-    Serial.printf("\\n--- Last %d entries from %s ---\\n", n, logFileName.c_str());
+    Serial.printf("\n--- Last %d entries from %s ---\n", n, logFileName.c_str());
     int start = max(0, (int)lines.size() - n);
     for (int i = start; i < (int)lines.size(); i++) Serial.println(lines[i]);
     Serial.println("---");
@@ -235,7 +235,7 @@ void loop() {
         float co_ema  = updateEma(ema_co,  co_avg);
 
         // Write CSV row
-        logFile.printf("%lu,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\\n",
+        logFile.printf("%lu,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n",
             millis(),
             ch4_avg, ch4_ema,
             h2s_avg, h2s_ema,
@@ -245,7 +245,7 @@ void loop() {
         flushCounter++;
         lastLogTime = millis();
 
-        Serial.printf("[%lu] CH4  avg:%.1f ema:%.1f | H2S  avg:%.1f ema:%.1f | CO  avg:%.1f ema:%.1f\\n",
+        Serial.printf("[%lu] CH4  avg:%.1f ema:%.1f | H2S  avg:%.1f ema:%.1f | CO  avg:%.1f ema:%.1f\n",
             millis(),
             ch4_avg, ch4_ema,
             h2s_avg, h2s_ema,

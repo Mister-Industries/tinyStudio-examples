@@ -131,7 +131,7 @@ void calibrate() {
     cal_x = sum_x / samples;
     cal_y = sum_y / samples;
 
-    Serial.printf("Calibration done. Offsets: X=%.3f Y=%.3f\\n", cal_x, cal_y);
+    Serial.printf("Calibration done. Offsets: X=%.3f Y=%.3f\n", cal_x, cal_y);
 }
 
 // ---------------------------------------------------------------
@@ -139,7 +139,7 @@ void calibrate() {
 // ---------------------------------------------------------------
 
 void printMenu() {
-    Serial.println("\\n--- tinyTheremin Menu ---");
+    Serial.println("\n--- tinyTheremin Menu ---");
     Serial.println("[Button]  Mute / Unmute");
     Serial.println("[m]  Mute / Unmute");
     Serial.println("[c]  Calibrate (hold flat + still first)");
@@ -218,13 +218,13 @@ void loop() {
 
     // 4. Serial Plotter output (rate-limited to 10Hz)
     if (millis() - lastPrintTime > 100) {
-        Serial.printf("Pitch:%.1f,Volume:%d\\n", frequency, amplitude);
+        Serial.printf("Pitch:%.1f,Volume:%d\n", frequency, amplitude);
         lastPrintTime = millis();
     }
 
     // 5. Serial Commands
     if (Serial.available()) {
-        String input = Serial.readStringUntil('\\n');
+        String input = Serial.readStringUntil('\n');
         input.trim();
 
         if (input.length() == 0) return;

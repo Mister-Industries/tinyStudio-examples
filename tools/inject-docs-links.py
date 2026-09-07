@@ -16,7 +16,7 @@ import extract as E
 DOCS = os.path.expanduser("~/mnt/site-tinydocs-cc/src/content/docs")
 
 def build_map():
-    """(file, nth flasher in that file) -> (owner, repo, path)"""
+    """(file, nth flasher in that file) -> (owner, repo, studio path, firmware path)"""
     items = F.load_blocks()
     per_file = collections.defaultdict(list)
     for i in sorted(items, key=lambda x: (x["file"], x["pos"])):
@@ -42,16 +42,16 @@ def build_map():
                 if key not in F.HAT_MAP:
                     continue
                 repo, folder = F.HAT_MAP[key]
-                out[(f, idx)] = (G.OWNER, repo, f"{F.HAT_ROOT}/{folder}")
+                out[(f, idx)] = (G.OWNER, repo, f"{F.HAT_ROOT}/{folder}", f"hats/{repo}/{folder}")
             else:
                 hit = names.get((i["file"], i["pos"]))
                 if not hit:
                     continue
                 cat, n = hit
-                out[(f, idx)] = (G.OWNER, G.EX_REPO, f"{cat}/{n}")
+                out[(f, idx)] = (G.OWNER, G.EX_REPO, f"{cat}/{n}", f"{cat}/{n}")
     return out
 
-ATTR = re.compile(r'\s+studio(?:Path|Owner|Repo|Url)\s*=\s*"[^"]*"')
+ATTR = re.compile(r'\s+(?:studio(?:Path|Owner|Repo|Url)|firmwarePath)\s*=\s*"[^"]*"')
 
 def main():
     mapping = build_map()
@@ -78,13 +78,14 @@ def main():
                 if not hit:
                     skipped += 1
                     continue
-                owner, repo, p = hit
+                owner, repo, p, fw = hit
                 clean = ATTR.sub("", block)
                 attrs = f'\n  studioPath="{p}"'
                 if repo != G.EX_REPO:
                     attrs += f'\n  studioRepo="{repo}"'
                 if owner != G.OWNER:
                     attrs += f'\n  studioOwner="{owner}"'
+                attrs += f'\n  firmwarePath="{fw}"'
                 # insert right after the component name
                 patched = clean.replace("<InteractiveFlasher", "<InteractiveFlasher" + attrs, 1)
                 new = new[:start] + patched + new[end:]

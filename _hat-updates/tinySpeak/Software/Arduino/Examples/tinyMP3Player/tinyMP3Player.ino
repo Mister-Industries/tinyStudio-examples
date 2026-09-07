@@ -63,7 +63,7 @@ const unsigned long doublePressWindow = 300;
 bool pendingSinglePress = false;
 
 void printMenu() {
-    Serial.println("\\n--- tinyMP3Player Menu ---");
+    Serial.println("\n--- tinyMP3Player Menu ---");
     Serial.println("[p] Play/Pause");
     Serial.println("[n] Next Track");
     Serial.println("[b] Previous Track");
@@ -92,7 +92,7 @@ void listMP3Files() {
         }
         file = root.openNextFile();
     }
-    Serial.printf("Total MP3s: %d\\n", mp3Files.size());
+    Serial.printf("Total MP3s: %d\n", mp3Files.size());
 }
 
 void playCurrentTrack() {
@@ -122,7 +122,7 @@ void togglePlayPause() {
 
 void nextTrack() {
     currentFileIndex = (currentFileIndex + 1) % mp3Files.size();
-    Serial.printf("Skipping to track %d\\n", currentFileIndex);
+    Serial.printf("Skipping to track %d\n", currentFileIndex);
     playCurrentTrack();
 }
 
@@ -179,12 +179,12 @@ void loop() {
             case '+':
                 volume = constrain(volume + 1, 0, 21);
                 audio.setVolume(volume);
-                Serial.printf("Volume: %d\\n", volume);
+                Serial.printf("Volume: %d\n", volume);
                 break;
             case '-':
                 volume = constrain(volume - 1, 0, 21);
                 audio.setVolume(volume);
-                Serial.printf("Volume: %d\\n", volume);
+                Serial.printf("Volume: %d\n", volume);
                 break;
             case 'l': listMP3Files(); break;
             case '?': printMenu(); break;

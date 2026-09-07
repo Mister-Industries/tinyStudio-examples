@@ -10,24 +10,22 @@
  */
 
 const int ledPin = 21;     // LED_BOOT on tinyCore
-const int channel = 0;
 const int freq = 5000;     // 5 kHz — no visible flicker
 const int resolution = 8;  // 8-bit: 0–255
 
 void setup() {
-  ledcSetup(channel, freq, resolution);
-  ledcAttachPin(ledPin, channel);
+  ledcAttach(ledPin, freq, resolution);
 }
 
 void loop() {
   // Fade up
   for (int duty = 0; duty <= 255; duty++) {
-    ledcWrite(channel, duty);
+    ledcWrite(ledPin, duty);
     delay(10);
   }
   // Fade down
   for (int duty = 255; duty >= 0; duty--) {
-    ledcWrite(channel, duty);
+    ledcWrite(ledPin, duty);
     delay(10);
   }
 }

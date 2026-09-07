@@ -10,18 +10,16 @@
  */
 
 const int buzzerPin = 2;
-const int channel = 0;
 
 void setup() {
-  ledcSetup(channel, 1000, 8);
-  ledcAttachPin(buzzerPin, channel);
+  ledcAttach(buzzerPin, 1000, 8);
 }
 
 void loop() {
-  ledcWriteTone(channel, 440);   // play A4 (440 Hz)
+  ledcWriteTone(buzzerPin, 440);   // play A4 (440 Hz)
   delay(500);
-  ledcWriteTone(channel, 523);   // play C5 (523 Hz)
+  ledcWriteTone(buzzerPin, 523);   // play C5 (523 Hz)
   delay(500);
-  ledcWriteTone(channel, 0);     // silence
+  ledcWriteTone(buzzerPin, 0);     // silence
   delay(500);
 }

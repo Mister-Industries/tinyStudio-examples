@@ -1,0 +1,92 @@
+{
+  "board": "tinyCore:esp32:tiny_core_esp32s3_nopsram",
+  "generated": "2026-09-07T03:43:58Z",
+  "ok": 1,
+  "failed": 0,
+  "total_bytes": 1029536,
+  "libraries": [
+    {
+      "name": "Adafruit_SSD1306",
+      "url": "https://github.com/adafruit/Adafruit_SSD1306.git",
+      "version": "2.5.13"
+    },
+    {
+      "name": "Adafruit_GFX_Library",
+      "url": "https://github.com/adafruit/Adafruit-GFX-Library.git",
+      "version": "1.11.11"
+    },
+    {
+      "name": "Adafruit_BusIO",
+      "url": "https://github.com/adafruit/Adafruit_BusIO.git",
+      "version": "1.16.2"
+    },
+    {
+      "name": "Adafruit_Unified_Sensor",
+      "url": "https://github.com/adafruit/Adafruit_Sensor.git",
+      "version": "1.1.14"
+    },
+    {
+      "name": "Adafruit_LSM6DS",
+      "url": "https://github.com/adafruit/Adafruit_LSM6DS.git",
+      "version": "4.7.4"
+    },
+    {
+      "name": "Adafruit_MCP4725",
+      "url": "https://github.com/adafruit/Adafruit_MCP4725.git",
+      "version": "2.0.2"
+    },
+    {
+      "name": "ArduinoJson",
+      "url": "https://github.com/bblanchon/ArduinoJson.git",
+      "version": "v7.2.1"
+    },
+    {
+      "name": "PubSubClient",
+      "url": "https://github.com/knolleary/pubsubclient.git",
+      "version": "v2.8"
+    },
+    {
+      "name": "WebSockets",
+      "url": "https://github.com/Links2004/arduinoWebSockets.git",
+      "version": "2.6.1"
+    },
+    {
+      "name": "AsyncTCP",
+      "url": "https://github.com/ESP32Async/AsyncTCP.git",
+      "version": null
+    },
+    {
+      "name": "ESPAsyncWebServer",
+      "url": "https://github.com/ESP32Async/ESPAsyncWebServer.git",
+      "version": null
+    },
+    {
+      "name": "ESP32_audioI2S",
+      "url": "https://github.com/schreibfaul1/ESP32-audioI2S.git",
+      "version": "3.2.1"
+    },
+    {
+      "name": "ESP_Mail_Client",
+      "url": "https://github.com/mobizt/ESP-Mail-Client.git",
+      "version": null
+    },
+    {
+      "name": "ElegantOTA",
+      "url": "https://github.com/ayushsharma82/ElegantOTA.git",
+      "version": null
+    }
+  ],
+  "results": [
+    {
+      "category": "basics",
+      "name": "wifi-ota-updates",
+      "dir": "/root/fw/repo/basics/wifi-ota-updates",
+      "ok": true,
+      "seconds": 49.2,
+      "bytes": 1029536,
+      "app_bytes": 964000,
+      "flash_pct": 45,
+      "firmware": "basics/wifi-ota-updates/firmware.bin"
+    }
+  ]
+}

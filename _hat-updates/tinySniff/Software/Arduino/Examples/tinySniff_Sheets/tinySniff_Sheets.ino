@@ -163,7 +163,7 @@ void saveUrl(const char* url) {
 // ---------------------------------------------------------------
 
 void promptForUrl() {
-    Serial.println("\\nEnter your Google Apps Script Web App URL and press Enter:");
+    Serial.println("\nEnter your Google Apps Script Web App URL and press Enter:");
     Serial.println("(starts with https://script.google.com/macros/s/...)");
     Serial.print("> ");
 
@@ -171,7 +171,7 @@ void promptForUrl() {
     while (true) {
         if (Serial.available()) {
             char c = Serial.read();
-            if (c == '\\n' || c == '\\r') {
+            if (c == '\n' || c == '\r') {
                 input.trim();
                 if (input.length() > 10) break; // Sanity check - must be a real URL
             } else {
@@ -184,7 +184,7 @@ void promptForUrl() {
     Serial.println(); // Newline after user input
     input.toCharArray(scriptUrl, sizeof(scriptUrl));
     saveUrl(scriptUrl);
-    Serial.printf("URL saved: %s\\n", scriptUrl);
+    Serial.printf("URL saved: %s\n", scriptUrl);
 }
 
 // ---------------------------------------------------------------
@@ -202,9 +202,9 @@ void connectWiFi() {
         attempts++;
     }
     if (WiFi.status() == WL_CONNECTED) {
-        Serial.printf("\\nConnected! IP: %s\\n", WiFi.localIP().toString().c_str());
+        Serial.printf("\nConnected! IP: %s\n", WiFi.localIP().toString().c_str());
     } else {
-        Serial.println("\\n[WARN] WiFi connection failed. Will retry.");
+        Serial.println("\n[WARN] WiFi connection failed. Will retry.");
     }
 }
 
@@ -238,10 +238,10 @@ void postToSheets(float ch4_avg, float ch4_ema, float h2s_avg, float h2s_ema, fl
 
     int code = http.GET();
     if (code == 200) {
-        Serial.printf("[Sheets] OK - CH4:%.1f(%.1f) H2S:%.1f(%.1f) CO:%.1f(%.1f)\\n",
+        Serial.printf("[Sheets] OK - CH4:%.1f(%.1f) H2S:%.1f(%.1f) CO:%.1f(%.1f)\n",
             ch4_avg, ch4_ema, h2s_avg, h2s_ema, co_avg, co_ema);
     } else {
-        Serial.printf("[Sheets] HTTP %d - check your script URL.\\n", code);
+        Serial.printf("[Sheets] HTTP %d - check your script URL.\n", code);
     }
     http.end();
 }
@@ -251,14 +251,14 @@ void postToSheets(float ch4_avg, float ch4_ema, float h2s_avg, float h2s_ema, fl
 // ---------------------------------------------------------------
 
 void printMenu() {
-    Serial.println("\\n--- Google Sheets Logger Menu ---");
-    Serial.printf("  WiFi:      %s\\n",
+    Serial.println("\n--- Google Sheets Logger Menu ---");
+    Serial.printf("  WiFi:      %s\n",
         WiFi.status() == WL_CONNECTED ? WiFi.localIP().toString().c_str() : "Not connected");
-    Serial.printf("  Status:    %s\\n", loggingPaused ? "PAUSED" : "LOGGING");
-    Serial.printf("  Interval:  %ds\\n", LOG_INTERVAL_MS / 1000);
-    Serial.printf("  Supersamp: %d reads/entry\\n", SUPERSAMPLE_COUNT);
-    Serial.printf("  EMA alpha: %.2f\\n", EMA_ALPHA);
-    Serial.printf("  URL:       %s\\n", strlen(scriptUrl) > 0 ? scriptUrl : "(not set - run [u])");
+    Serial.printf("  Status:    %s\n", loggingPaused ? "PAUSED" : "LOGGING");
+    Serial.printf("  Interval:  %ds\n", LOG_INTERVAL_MS / 1000);
+    Serial.printf("  Supersamp: %d reads/entry\n", SUPERSAMPLE_COUNT);
+    Serial.printf("  EMA alpha: %.2f\n", EMA_ALPHA);
+    Serial.printf("  URL:       %s\n", strlen(scriptUrl) > 0 ? scriptUrl : "(not set - run [u])");
     Serial.println("[r]  Post a reading now");
     Serial.println("[u]  Update Apps Script URL");
     Serial.println("[w]  Print WiFi status");
@@ -289,7 +289,7 @@ void setup() {
         Serial.println("No Apps Script URL found in flash.");
         promptForUrl();
     } else {
-        Serial.printf("Loaded URL from flash: %s\\n", scriptUrl);
+        Serial.printf("Loaded URL from flash: %s\n", scriptUrl);
     }
 
     connectWiFi();
@@ -342,7 +342,7 @@ void loop() {
                 promptForUrl();
                 break;
             case 'w':
-                Serial.printf("WiFi: %s  RSSI: %d dBm\\n",
+                Serial.printf("WiFi: %s  RSSI: %d dBm\n",
                     WiFi.status() == WL_CONNECTED
                         ? WiFi.localIP().toString().c_str()
                         : "disconnected",

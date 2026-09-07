@@ -1,24 +1,27 @@
 # tinyStudio Examples
 
-Ready-to-open Arduino projects for the **tinyCore** (ESP32-S3) and the tinyHAT
-expansion boards, from [MR.INDUSTRIES](https://mr.industries).
+Ready-to-open, ready-to-flash Arduino projects for the **tinyCore** (ESP32-S3)
+and the tinyHAT expansion boards, from [MR.INDUSTRIES](https://mr.industries).
 
-Every project here is generated from the code published on
-[tinyDocs](https://tinydocs.cc). The docs page is the source of truth, this repo
-is the machine-readable mirror of it, and
-[tinyStudio](https://app.tinystudio.cc) reads this repo directly — so the code
-in the tutorial, the project you open in the IDE, and the sketch you flash are
-all the same bytes.
+Every project is generated from the code published on
+[tinyDocs](https://tinydocs.cc) and compiled here, so the code in the tutorial,
+the project you open in the IDE, and the binary you flash are all the same
+bytes. The docs page is the source of truth; this repo is its machine-readable
+mirror.
 
-## Open an example
+## Three ways in
 
-1. **From the docs** — every smart code block on tinyDocs has a green pencil
-   **Edit in tinyStudio** button that opens that exact sketch.
-2. **From tinyStudio** — the **Examples** tab lists everything in
-   `examples.json`, grouped by category. Desktop can also download the whole set
-   to *Documents/tinyStudio Examples*.
-3. **By URL** — `https://app.tinystudio.cc/<owner>/<repo>/<path>`, e.g.
-   [`…/Mister-Industries/tinyStudio-examples/basics/blink-basic`](https://app.tinystudio.cc/Mister-Industries/tinyStudio-examples/basics/blink-basic)
+1. **Flash it** — the green **Flash tinyCore** button on any tinyDocs code block
+   writes the prebuilt image over Web Serial. No IDE, no tinyStudio, no
+   tinyService, nothing to install.
+2. **Edit it** — the green pencil **Edit in tinyStudio** button opens the same
+   sketch in [tinyStudio](https://app.tinystudio.cc).
+3. **Browse it** — the **Examples** tab in tinyStudio lists everything in
+   `examples.json`, grouped by category. Desktop can download the whole set to
+   *Documents/tinyStudio Examples*.
+
+Direct URLs work too: `https://app.tinystudio.cc/<owner>/<repo>/<path>`, e.g.
+[`…/tinyStudio-examples/basics/blink-basic`](https://app.tinystudio.cc/Mister-Industries/tinyStudio-examples/basics/blink-basic)
 
 ## Layout
 
@@ -26,11 +29,13 @@ all the same bytes.
 basics/<name>/<name>.ino     tinyCore fundamentals — LEDs, buttons, sensors, SD, WiFi, BLE
 basics/<name>/README.md      the tutorial text that goes with the sketch
 advanced/<name>/…            peripheral-level reference sketches — ADC, DAC, PWM
+firmware/<cat>/<name>/       prebuilt firmware.bin + manifest.json for browser flashing
 examples.json                the manifest tinyStudio reads
 examples.pending.json        entries waiting on a HAT repo push
 _hat-updates/                docs-current copies of the tinyHAT sketches
-tools/                       the generator that builds this repo from tinyDocs
-docs/PIPELINE.md             how the whole thing works
+tools/                       the generators that build this repo from tinyDocs
+docs/PIPELINE.md             how sources are generated
+docs/FIRMWARE.md             how firmware is built and served
 ```
 
 Each project is a standard Arduino sketch folder — folder name matches the
@@ -47,19 +52,32 @@ tinyStudio loads, so `examples.json` points straight at it:
 | tinySniff | [`Mister-Industries/tinySniff`](https://github.com/Mister-Industries/tinySniff) | 4 |
 | tinySpeak | [`Mister-Industries/tinySpeak`](https://github.com/Mister-Industries/tinySpeak) | 9 |
 
-One source of truth per board: push a HAT sketch to its own repo and everyone
-gets it, with nothing to re-sync here. `_hat-updates/` exists to make the drift
-between a HAT repo and the docs visible — see
-[docs/PIPELINE.md](docs/PIPELINE.md).
+Push a HAT sketch to its own repo and everyone gets it, with nothing to re-sync
+here. `_hat-updates/` exists to make drift between a HAT repo and the docs
+visible — see [docs/PIPELINE.md](docs/PIPELINE.md). Their **firmware** is built
+here, under `firmware/hats/`, because that is where the flasher looks.
+
+## Prebuilt firmware
+
+```bash
+python3 tools/build-firmware.py          # compile everything, ~30s per sketch
+python3 tools/build-firmware.py --only blink-basic
+```
+
+Images are merged without the ESP32 core's 8 MB flash padding, so a blink build
+is ~360 KB rather than 8 MB — 23x smaller, and the flash starts immediately.
+[docs/FIRMWARE.md](docs/FIRMWARE.md) covers the flash layout, how a docs page
+resolves a firmware URL, and what currently doesn't build.
 
 ## Regenerating
 
 ```bash
-python3 tools/extract-blocks.py
-python3 tools/build-examples.py
-python3 tools/build-manifest.py
-python3 tools/inject-docs-links.py
-python3 tools/verify.py
+python3 tools/extract-blocks.py       # parse every code block out of tinyDocs
+python3 tools/build-examples.py       # write basics/ + advanced/ projects
+python3 tools/build-manifest.py       # link the HATs, write examples.json
+python3 tools/inject-docs-links.py    # write studioPath + firmwarePath back into the .mdx
+python3 tools/verify.py               # check the whole thing lines up
+python3 tools/build-firmware.py       # compile every sketch to a flashable image
 ```
 
 **Edit the docs page, not the `.ino`.** The generators delete and rewrite the
@@ -134,7 +152,7 @@ output tree on every run.
 | **Play a Tone on a Buzzer**<br/><sub>The Arduino analogWrite() and tone() functions don't work on ESP32.</sub> | tinyCore (ESP32-S3) | [open](https://app.tinystudio.cc/Mister-Industries/tinyStudio-examples/advanced/pwm-play-tone-buzzer) |
 | **Reading an Analog Value**<br/><sub>The ESP32-S3 stores factory calibration data in its eFuse memory, and analogReadMilliVolts()…</sub> | tinyCore (ESP32-S3) | [open](https://app.tinystudio.cc/Mister-Industries/tinyStudio-examples/advanced/adc-read-analog) |
 
-### tinyHATs (13 — linked from the HAT repos)
+### tinyHATs (13 — sources linked from the HAT repos, firmware built here)
 
 | Example | Board | Open |
 |---|---|---|

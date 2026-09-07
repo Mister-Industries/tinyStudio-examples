@@ -17,6 +17,42 @@ def frontmatter(src):
         if mm: fm[mm.group(1)] = mm.group(2)
     return fm, src
 
+JS_ESC = {"n": "\n", "r": "\r", "t": "\t", "b": "\b", "f": "\f", "v": "\v",
+          "0": "\0", "\\": "\\", "`": "`", "$": "$", "'": "'", '"': '"', "\n": ""}
+
+
+def js_unescape(raw):
+    """Turn the RAW text of a JS template literal into the string JS produces.
+
+    The docs write sketches inside code={`...`}, so a C++ `\r\n` has to be typed
+    as `\\r\\n` in the .mdx and a C++ `\"` as `\\"`. Copying the raw text into a
+    .ino leaves the doubled backslashes in place, which the compiler reads as a
+    literal backslash followed by r — hence errors like `unable to find string
+    literal operator 'operator""file'`. Decoding the escapes here yields exactly
+    what the page displays and what its Copy button puts on the clipboard.
+    """
+    out = []
+    i, n = 0, len(raw)
+    while i < n:
+        c = raw[i]
+        if c != "\\" or i + 1 >= n:
+            out.append(c); i += 1; continue
+        e = raw[i + 1]
+        if e == "u":
+            m = re.match(r"u\{([0-9a-fA-F]{1,6})\}|u([0-9a-fA-F]{4})", raw[i + 1:])
+            if m:
+                out.append(chr(int(m.group(1) or m.group(2), 16)))
+                i += 1 + m.end(); continue
+        elif e == "x":
+            m = re.match(r"x([0-9a-fA-F]{2})", raw[i + 1:])
+            if m:
+                out.append(chr(int(m.group(1), 16)))
+                i += 1 + m.end(); continue
+        out.append(JS_ESC.get(e, e))
+        i += 2
+    return "".join(out)
+
+
 def dedent(code):
     """Strip the block's common indent.
 
@@ -173,6 +209,7 @@ def collect():
             for start, end, block in find_flashers(src):
                 code = attr(block, "code")
                 if not code: continue
+                code = js_unescape(code)
                 items.append(dict(
                     kind="flasher", file=rel, page_title=page_title,
                     title=attr(block, "title") or "", manifestPath=attr(block, "manifestPath") or "",

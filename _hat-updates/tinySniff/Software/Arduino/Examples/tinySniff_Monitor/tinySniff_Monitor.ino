@@ -59,7 +59,7 @@ void loop() {
     lastStreamTime = millis();
 
     // "label:value" pairs are what name the three traces in the plotter.
-    Serial.printf("CH4:%d,H2S:%d,CO:%d\\n",
+    Serial.printf("CH4:%d,H2S:%d,CO:%d\n",
         analogRead(PIN_CH4),
         analogRead(PIN_H2S),
         analogRead(PIN_CO));

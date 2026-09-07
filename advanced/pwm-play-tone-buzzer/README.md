@@ -2,7 +2,9 @@
 
 For buzzers, `ledcWriteTone()` sets the frequency directly:
 
-**The Arduino `analogWrite()` and `tone()` functions don't work on ESP32.** The LEDC functions (`ledcSetup`, `ledcAttachPin`, `ledcWrite`, `ledcWriteTone`) are more powerful and flexible — they just have different names. Every ESP32 PWM tutorial will use these functions.
+**The Arduino `analogWrite()` and `tone()` functions don't work on ESP32.** The LEDC functions (`ledcAttach`, `ledcWrite`, `ledcWriteTone`, `ledcDetach`) are more powerful and flexible — they just have different names. Every ESP32 PWM tutorial will use these functions.
+
+Older tutorials (and most AI-generated code) still use `ledcSetup()` and `ledcAttachPin()`, where you picked a channel number yourself. Espressif removed those in Arduino-ESP32 **3.0.x** and folded them into `ledcAttach()`, which allocates a channel for you — so every LEDC call now takes the **pin**, not a channel. If you see *'ledcSetup' was not declared in this scope*, that's what happened.
 
 ## Open it
 

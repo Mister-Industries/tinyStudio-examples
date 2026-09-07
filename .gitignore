@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 blocks.json
+.arduino/
+.arduino-cli.yaml
+.build/

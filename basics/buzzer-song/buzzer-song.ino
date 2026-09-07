@@ -47,8 +47,7 @@ int noteDurations[] = {
 
 void setup() {
   Serial.begin(115200);
-  ledcSetup(pwmChannel, 2000, resolution);
-  ledcAttachPin(buzzerPin, pwmChannel);
+  ledcAttach(buzzerPin, 2000, resolution);
 
   Serial.println("Playing Twinkle Twinkle Little Star!");
 }
@@ -58,13 +57,13 @@ void playSong() {
 
   for (int i = 0; i < songLength; i++) {
     if (melody[i] > 0) {
-      ledcWriteTone(pwmChannel, melody[i]);
+      ledcWriteTone(buzzerPin, melody[i]);
     } else {
-      ledcWriteTone(pwmChannel, 0);  // Rest
+      ledcWriteTone(buzzerPin, 0);  // Rest
     }
 
     delay(noteDurations[i]);
-    ledcWriteTone(pwmChannel, 0);  // Stop sound
+    ledcWriteTone(buzzerPin, 0);  // Stop sound
     delay(50);  // Small pause between notes
   }
 }

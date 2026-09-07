@@ -3,7 +3,7 @@
 import json, os, re, sys, collections
 
 HOME = os.path.expanduser("~")
-REPO = f"{HOME}/mnt/tinyStudio/tinyStudio-examples"
+REPO = f"{HOME}/work/out/tinyStudio-examples"
 DOCS = f"{HOME}/mnt/site-tinydocs-cc/src/content/docs"
 fails, warns = [], []
 
