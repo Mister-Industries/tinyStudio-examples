@@ -28,6 +28,7 @@ Direct URLs work too: `https://app.tinystudio.cc/<owner>/<repo>/<path>`, e.g.
 ```
 basics/<name>/<name>.ino     tinyCore fundamentals — LEDs, buttons, sensors, SD, WiFi, BLE
 basics/<name>/README.md      the tutorial text that goes with the sketch
+basics/<name>/visual.js      optional p5 sketch (Visual view), with diagram.json (Circuit view)
 advanced/<name>/…            peripheral-level reference sketches — ADC, DAC, PWM
 firmware/<cat>/<name>/       prebuilt firmware.bin + manifest.json for browser flashing
 examples.json                the manifest tinyStudio reads
@@ -81,13 +82,15 @@ python3 tools/build-firmware.py       # compile every sketch to a flashable imag
 ```
 
 **Edit the docs page, not the `.ino`.** The generators delete and rewrite the
-output tree on every run.
+output tree on every run. Circuit/Visual files added beside a generated sketch,
+and the hand-authored `basics/qwiic-joystick`, are copied back in — see
+[docs/PIPELINE.md](docs/PIPELINE.md#hand-authored-files).
 
 ---
 
 ## The collection
 
-### Basics (50)
+### Basics (51)
 
 | Example | Board | Open |
 |---|---|---|
@@ -124,6 +127,7 @@ output tree on every run.
 | **Play a real song**<br/><sub>Play a real song — from the tinyDocs “How to Control a Buzzer (Analog Output)” guide.</sub> | tinyCore (ESP32-S3) | [open](https://app.tinystudio.cc/Mister-Industries/tinyStudio-examples/basics/buzzer-song) |
 | **Playing different tones**<br/><sub>Playing different tones — from the tinyDocs “How to Control a Buzzer (Analog Output)” guide.</sub> | tinyCore (ESP32-S3) | [open](https://app.tinystudio.cc/Mister-Industries/tinyStudio-examples/basics/buzzer-tones) |
 | **PWM Control for All Three LEDs**<br/><sub>PWM Control for All Three LEDs — from the tinyDocs “How to Control LEDs with the tinyCore” g…</sub> | tinyCore (ESP32-S3) | [open](https://app.tinystudio.cc/Mister-Industries/tinyStudio-examples/basics/blink-pwm-wave) |
+| **Qwiic Joystick**<br/><sub>Read a Qwiic joystick and play Asteroids or Pong with it in the Visual view.</sub> | tinyCore + Qwiic Joystick | [open](https://app.tinystudio.cc/Mister-Industries/tinyStudio-examples/basics/qwiic-joystick) |
 | **Reading a potentiometer**<br/><sub>Middle pin of potentiometer → GPIO 1 on tinyCore 3.</sub> | tinyCore (ESP32-S3) | [open](https://app.tinystudio.cc/Mister-Industries/tinyStudio-examples/basics/read-sensor-potentiometer) |
 | **Reading from a File**<br/><sub>Reading from a File — from the tinyDocs “How to use SD Cards on the tinyCore” guide.</sub> | tinyCore (ESP32-S3) | [open](https://app.tinystudio.cc/Mister-Industries/tinyStudio-examples/basics/sdcard-read-file) |
 | **Reading input from Serial Monitor**<br/><sub>The Serial Monitor isn't just for output - you can send commands to your tinyCore too.</sub> | tinyCore (ESP32-S3) | [open](https://app.tinystudio.cc/Mister-Industries/tinyStudio-examples/basics/serial-monitor-read-input) |
@@ -169,14 +173,6 @@ output tree on every run.
 | **tinySpeak: tinyTheremin**<br/><sub>A motion-controlled musical instrument.</sub> | tinyCore + tinySpeak HAT | [open](https://app.tinystudio.cc/Mister-Industries/tinySpeak/Software/Arduino/Examples/tinyTheremin) |
 | **tinySpeak: tinyWalkieTalkie**<br/><sub>Push-to-Talk Intercom using ESP-NOW.</sub> | tinyCore + tinySpeak HAT | [open](https://app.tinystudio.cc/Mister-Industries/tinySpeak/Software/Arduino/Examples/tinyWalkieTalkie) |
 | **tinySpeak: tinyWebSynth**<br/><sub>Chiptune synthesizer: live piano, 2-track melodic step sequencer, 3-track drum machine (Kick…</sub> | tinyCore + tinySpeak HAT | [open](https://app.tinystudio.cc/Mister-Industries/tinySpeak/Software/Arduino/Examples/tinyWebSynth) |
-
-### tinyStudio demos (3 — with Circuit + Visual views)
-
-| Example | Board | Open |
-|---|---|---|
-| **Blink LED (Circuit + Visual)**<br/><sub>Blink the onboard LED and mirror its state in the Visual view.</sub> | tinyCore / Arduino | [open](https://app.tinystudio.cc/Mister-Industries/tinyStudio/demo/Blink Example) |
-| **Fade LED (Circuit + Visual)**<br/><sub>PWM-fade an LED and chart the brightness curve live.</sub> | tinyCore / Arduino | [open](https://app.tinystudio.cc/Mister-Industries/tinyStudio/demo/Fade Example) |
-| **Joystick (Circuit + Visual)**<br/><sub>Read a Qwiic joystick and visualize the stick position.</sub> | tinyCore + Qwiic Joystick | [open](https://app.tinystudio.cc/Mister-Industries/tinyStudio/demo/Joystick Example) |
 
 ---
 

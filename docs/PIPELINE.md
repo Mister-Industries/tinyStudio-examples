@@ -47,9 +47,8 @@ Two consequences shape the layout:
 |---|---|---|
 | `tinyStudio-examples` (this one) | `basics/`, `advanced/`, `firmware/`, `examples.json` | Generated from tinyDocs. Keeps churn out of the IDE repo, and keeps code and binaries in one place. |
 | `tinySniff`, `tinySpeak` | `Software/Arduino/Examples/<Name>/<Name>.ino` | Board code belongs with the board. Already in the layout tinyStudio loads — **linked, never copied.** |
-| `tinyStudio` | `demo/` | The three demos with `diagram.json` + `visual.js`, which exercise the Circuit and Visual views. |
 
-`examples.json` here is the single manifest covering all three. HAT *sources*
+`examples.json` here is the single manifest covering both. HAT *sources*
 stay in the HAT repos; HAT *firmware* is built here under `firmware/hats/`,
 because that is the one place the flasher looks.
 
@@ -60,10 +59,10 @@ because that is the one place the flasher looks.
   "title":       "Basic Blink Program",
   "description": "…one sentence, from the docs prose or the sketch banner…",
   "owner":       "Mister-Industries",
-  "repo":        "tinyStudio-examples",   // or tinySniff / tinySpeak / tinyStudio
+  "repo":        "tinyStudio-examples",   // or tinySniff / tinySpeak
   "path":        "basics/blink-basic",
   "board":       "tinyCore (ESP32-S3)",
-  "category":    "basics",                // demos | basics | advanced | hats
+  "category":    "basics",                // basics | advanced | hats
   "docsUrl":     "https://tinydocs.cc/2_tiny-core/basics/blink-led/"
 }
 ```
@@ -115,6 +114,20 @@ python3 tools/build-firmware.py       # compile every sketch to a flashable imag
 
 The scripts expect both repos checked out side by side; paths are constants at
 the top of each file.
+
+### Hand-authored files
+
+tinyDocs only publishes sketches, but a few projects carry more than that:
+
+- `basics/blink-basic` and `basics/blink-breathing` have a `diagram.json`
+  (Circuit view) and `visual.js` (Visual view) beside the generated sketch.
+- `basics/qwiic-joystick` has no docs page at all — sketch, README, circuit and
+  the visual/game sketches are all written by hand.
+
+`build-examples.py` copies these back into the rebuilt tree from the checked-out
+repo (`EXAMPLES_REPO`, default: the repo the script lives in): any extra file
+beside a generated sketch, plus every project in `HAND_AUTHORED`, whole.
+`build-manifest.py` writes the manifest entries for `HAND_AUTHORED` projects.
 
 ### What the extractor takes
 

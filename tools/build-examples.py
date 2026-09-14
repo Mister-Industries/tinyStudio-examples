@@ -7,7 +7,9 @@ Writes <STAGING>/  — a complete, ready-to-push repo.
 
 Run extract.py first, then this. Both are idempotent: the output tree is
 deleted and rebuilt from scratch every run, so the docs stay the source of
-truth and nothing hand-edited in the output survives (edit the docs instead).
+truth and hand edits to a generated sketch don't survive (edit the docs instead).
+The exceptions are copied back in from REPO: extra files beside a generated
+sketch (diagram.json, circuit.json, visual.js, …) and HAND_AUTHORED projects.
 """
 import json, os, re, shutil, collections
 
@@ -19,6 +21,13 @@ DOCS_BASE   = "https://tinydocs.cc"                 # tinyDocs published site
 STUDIO_BASE = "https://app.tinystudio.cc"           # tinyStudio web IDE
 OWNER       = "Mister-Industries"
 EX_REPO     = "tinyStudio-examples"
+
+# The checked-out examples repo — the source of the hand-authored files below.
+REPO = os.environ.get("EXAMPLES_REPO",
+                      os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Projects with no tinyDocs source. Copied over whole on every build;
+# build-manifest.py writes their manifest entries.
+HAND_AUTHORED = {"basics/qwiic-joystick"}
 
 # ---------------------------------------------------------------- categories
 CATMAP = [
@@ -281,6 +290,24 @@ def main():
             "category": cat,
             "docsUrl": docs_url(i["file"]),
         })
+
+    # 4. carry hand-authored files over from the repo: tinyDocs only has the
+    #    sketch, so Circuit/Visual files beside a generated sketch are copied
+    #    back, and HAND_AUTHORED projects are copied whole.
+    for cat in ("basics", "advanced"):
+        src_cat = os.path.join(REPO, cat)
+        if not os.path.isdir(src_cat):
+            continue
+        for name in sorted(os.listdir(src_cat)):
+            src, dst = os.path.join(src_cat, name), os.path.join(STAGING, cat, name)
+            if not os.path.isdir(src):
+                continue
+            if f"{cat}/{name}" in HAND_AUTHORED:
+                shutil.copytree(src, dst, dirs_exist_ok=True)
+            elif os.path.isdir(dst):
+                for fn in os.listdir(src):
+                    if fn not in (f"{name}.ino", "README.md") and os.path.isfile(os.path.join(src, fn)):
+                        shutil.copy2(os.path.join(src, fn), os.path.join(dst, fn))
 
     with open(os.path.join(STAGING, ".manifest-core.json"), "w", newline="\n") as f:
         json.dump(manifest, f, indent=2)

@@ -57,6 +57,8 @@ LIBRARIES = [
     ("ESP32_audioI2S",          "https://github.com/schreibfaul1/ESP32-audioI2S.git",    "3.2.1"),
     ("ESP_Mail_Client",         "https://github.com/mobizt/ESP-Mail-Client.git",         None),
     ("ElegantOTA",              "https://github.com/ayushsharma82/ElegantOTA.git",       None),
+    ("SparkFun_Qwiic_Joystick_Arduino_Library",
+     "https://github.com/sparkfun/SparkFun_Qwiic_Joystick_Arduino_Library.git",      "v1.1.1"),
 ]
 
 

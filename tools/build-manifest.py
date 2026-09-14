@@ -101,27 +101,16 @@ def main():
         open(os.path.join(d, "README.md"), "w", encoding="utf-8", newline="\n").write(
             G.readme(i, folder, "hats", studio))
 
-    # The three original tinyStudio demo projects keep their circuit + p5 views.
-    demos = [
-        {"title": "Blink LED (Circuit + Visual)",
-         "description": "Blink the onboard LED and mirror its state in the Visual view.",
-         "owner": OWNER, "repo": "tinyStudio", "path": "demo/Blink Example",
-         "board": "tinyCore / Arduino", "category": "demos",
-         "docsUrl": f"{G.DOCS_BASE}/2_tiny-core/basics/blink-led/"},
-        {"title": "Fade LED (Circuit + Visual)",
-         "description": "PWM-fade an LED and chart the brightness curve live.",
-         "owner": OWNER, "repo": "tinyStudio", "path": "demo/Fade Example",
-         "board": "tinyCore / Arduino", "category": "demos",
-         "docsUrl": f"{G.DOCS_BASE}/5_reference/advanced/pwm/"},
-        {"title": "Joystick (Circuit + Visual)",
-         "description": "Read a Qwiic joystick and visualize the stick position.",
-         "owner": OWNER, "repo": "tinyStudio", "path": "demo/Joystick Example",
-         "board": "tinyCore + Qwiic Joystick", "category": "demos",
-         "docsUrl": f"{G.DOCS_BASE}/2_tiny-core/basics/read-sensor-value/"},
+    # G.HAND_AUTHORED projects have no docs block, so their entries live here.
+    hand_authored = [
+        {"title": "Qwiic Joystick",
+         "description": "Read a Qwiic joystick and play Asteroids or Pong with it in the Visual view.",
+         "owner": OWNER, "repo": G.EX_REPO, "path": "basics/qwiic-joystick",
+         "board": "tinyCore + Qwiic Joystick", "category": "basics"},
     ]
 
-    order = {"demos": 0, "basics": 1, "advanced": 2, "hats": 3}
-    manifest = demos + entries
+    order = {"basics": 0, "advanced": 1, "hats": 2}
+    manifest = hand_authored + entries
     manifest.sort(key=lambda e: (order.get(e["category"], 9), e["title"].lower()))
 
     with open(f"{STAGING}/examples.json", "w", encoding="utf-8", newline="\n") as f:

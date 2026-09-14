@@ -1,35 +1,5 @@
 [
   {
-    "title": "Blink LED (Circuit + Visual)",
-    "description": "Blink the onboard LED and mirror its state in the Visual view.",
-    "owner": "Mister-Industries",
-    "repo": "tinyStudio",
-    "path": "demo/Blink Example",
-    "board": "tinyCore / Arduino",
-    "category": "demos",
-    "docsUrl": "https://tinydocs.cc/2_tiny-core/basics/blink-led/"
-  },
-  {
-    "title": "Fade LED (Circuit + Visual)",
-    "description": "PWM-fade an LED and chart the brightness curve live.",
-    "owner": "Mister-Industries",
-    "repo": "tinyStudio",
-    "path": "demo/Fade Example",
-    "board": "tinyCore / Arduino",
-    "category": "demos",
-    "docsUrl": "https://tinydocs.cc/5_reference/advanced/pwm/"
-  },
-  {
-    "title": "Joystick (Circuit + Visual)",
-    "description": "Read a Qwiic joystick and visualize the stick position.",
-    "owner": "Mister-Industries",
-    "repo": "tinyStudio",
-    "path": "demo/Joystick Example",
-    "board": "tinyCore + Qwiic Joystick",
-    "category": "demos",
-    "docsUrl": "https://tinydocs.cc/2_tiny-core/basics/read-sensor-value/"
-  },
-  {
     "title": "Alternating Blink Pattern",
     "description": "Hint: Try changing the values of the delay() functions to create different speeds.",
     "owner": "Mister-Industries",
@@ -358,6 +328,15 @@
     "board": "tinyCore (ESP32-S3)",
     "category": "basics",
     "docsUrl": "https://tinydocs.cc/2_tiny-core/basics/blink-led/"
+  },
+  {
+    "title": "Qwiic Joystick",
+    "description": "Read a Qwiic joystick and play Asteroids or Pong with it in the Visual view.",
+    "owner": "Mister-Industries",
+    "repo": "tinyStudio-examples",
+    "path": "basics/qwiic-joystick",
+    "board": "tinyCore + Qwiic Joystick",
+    "category": "basics"
   },
   {
     "title": "Reading a potentiometer",
