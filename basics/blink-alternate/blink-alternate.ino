@@ -9,9 +9,9 @@
  * Generated from tinyDocs — edit the docs page, not this file.
  */
 
-//Basic Blink Example
+//Basic Blink Example   
 
-  const int ledBoot = 21;    // LED_BOOT pin
+  const int ledBoot = 21b ;    // LED_BOOT pin
   const int ledSig = 33;     // LED_SIG pin
 
   void setup() {
