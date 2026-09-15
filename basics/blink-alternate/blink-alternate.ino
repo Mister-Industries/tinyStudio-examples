@@ -1,5 +1,5 @@
 /*
- * Alternating Blink Pattern
+ * Morse Code Blink — "I LOVE YOU"
  *
  * Board:  tinyCore (ESP32-S3)
  * Docs:   https://tinydocs.cc/2_tiny-core/basics/blink-led/
@@ -9,29 +9,62 @@
  * Generated from tinyDocs — edit the docs page, not this file.
  */
 
-//Basic Blink Example   
+// Blinks "I LOVE YOU" in Morse code on the built-in LEDs.
 
-  const int ledBoot = 21b ;    // LED_BOOT pin
-  const int ledSig = 33;     // LED_SIG pin
+const int ledBoot = 21;   // LED_BOOT pin
+const int ledSig  = 33;   // LED_SIG pin
 
-  void setup() {
-    // Initialize both built-in LEDs as outputs
-    pinMode(ledBoot, OUTPUT);
-    pinMode(ledSig, OUTPUT);
+const int unit = 200;     // base Morse time unit in milliseconds
 
-    // Start with both LEDs off
-    digitalWrite(ledBoot, LOW);
-    digitalWrite(ledSig, LOW);
-  }
+// One Morse token per letter, separated by spaces; "/" marks a word gap.
+// I=..  L=.-..  O=---  V=...-  E=.   Y=-.--  O=---  U=..-
+const char* message = ".. / .-.. --- ...- . / -.-- --- ..-";
+
+void ledsOn() {
+  digitalWrite(ledBoot, HIGH);
+  digitalWrite(ledSig, HIGH);
+}
+
+void ledsOff() {
+  digitalWrite(ledBoot, LOW);
+  digitalWrite(ledSig, LOW);
+}
+
+// A dot: on for 1 unit, then a 1-unit gap between symbols.
+void dot() {
+  ledsOn();
+  delay(unit);
+  ledsOff();
+  delay(unit);
+}
+
+// A dash: on for 3 units, then a 1-unit gap between symbols.
+void dash() {
+  ledsOn();
+  delay(unit * 3);
+  ledsOff();
+  delay(unit);
+}
+
+void setup() {
+  pinMode(ledBoot, OUTPUT);
+  pinMode(ledSig, OUTPUT);
+  ledsOff();
+}
 
 void loop() {
-  // Turn on BOOT, turn off SIG
-  digitalWrite(ledBoot, HIGH);
-  digitalWrite(ledSig, LOW);
-  delay(300);
+  for (int i = 0; message[i] != '\0'; i++) {
+    char c = message[i];
+    if (c == '.') {
+      dot();
+    } else if (c == '-') {
+      dash();
+    } else if (c == ' ') {
+      delay(unit * 2);   // gap between letters (2 + the 1 already added = 3 units)
+    } else if (c == '/') {
+      delay(unit * 6);   // gap between words (6 + the 1 already added = 7 units)
+    }
+  }
 
-  // Turn off BOOT, turn on SIG
-  digitalWrite(ledBoot, LOW);
-  digitalWrite(ledSig, HIGH);
-  delay(300);
+  delay(unit * 7);       // pause before repeating the message
 }
