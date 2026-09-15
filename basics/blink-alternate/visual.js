@@ -1,54 +1,88 @@
-// visual.js — Serial Plotter
+// visual.js — Serial Plotter (tinyStudio theme)
 // Graphs the latest number printed over Serial (serialValue()) as a scrolling
 // line, auto-scaling to the data. Try Serial.println(analogRead(A0)) on the
 // board. Switch to Code to edit this sketch; Visual to run it.
 
-let data = [];
 const MAX = 240; // points kept on screen
+let data = [];
+let shown = 0;   // eased readout
 
 function setup() {
   createCanvas(720, 720);
-  textFont('monospace');
 }
 
 function draw() {
-  background(7, 11, 34);
+  background(theme.bg);
+  const pad = 42;
 
   // pull the most recent serial value each frame
-  data.push(serialValue());
-  if (data.length > MAX) data.shift();
+  if (serialAvailable()) {
+    data.push(serialValue());
+    if (data.length > MAX) data.shift();
+  }
+
+  // label
+  noStroke();
+  fill(theme.muted);
+  textFont(theme.font);
+  textStyle(BOLD);
+  textSize(20);
+  textAlign(LEFT, TOP);
+  text('SERIAL PLOTTER', pad, pad);
+
+  // big readout
+  shown = lerp(shown, serialValue(), 0.15);
+  fill(theme.text);
+  textFont(theme.mono);
+  textStyle(NORMAL);
+  textSize(96);
+  text(serialAvailable() ? shown.toFixed(2) : '—', pad, pad + 42);
+  fill(theme.muted);
+  textFont(theme.font);
+  textSize(20);
+  text(serialAvailable() ? 'latest value' : 'waiting for serial…', pad, pad + 156);
 
   // auto-scale to the data range (with a little headroom)
   let lo = Math.min(...data, 0);
   let hi = Math.max(...data, 1);
   if (hi === lo) hi = lo + 1;
 
+  // chart card
+  const top = 255;
+  const w = width - pad * 2;
+  const h = height - top - pad;
+  fill(theme.panel);
+  stroke(theme.border);
+  strokeWeight(1.5);
+  rect(pad, top, w, h, 15);
+
   // grid
-  stroke(26, 31, 77);
+  stroke(theme.grid);
   strokeWeight(1);
-  for (let i = 0; i <= 4; i++) {
-    let y = map(i, 0, 4, 20, height - 24);
-    line(40, y, width - 12, y);
+  for (let i = 1; i < 4; i++) {
+    const y = top + (h * i) / 4;
+    line(pad + 21, y, pad + w - 21, y);
   }
 
   // plotted line
   noFill();
-  stroke(0, 240, 255);
-  strokeWeight(2);
+  stroke(theme.accent);
+  strokeWeight(3);
   beginShape();
   for (let i = 0; i < data.length; i++) {
-    let x = map(i, 0, MAX - 1, 40, width - 12);
-    let y = map(data[i], lo, hi, height - 24, 20);
+    const x = map(i, 0, MAX - 1, pad + 21, pad + w - 21);
+    const y = map(data[i], lo, hi, top + h - 21, top + 21, true);
     vertex(x, y);
   }
   endShape();
 
-  // readouts
+  // axis range labels
   noStroke();
-  fill(235, 238, 255);
-  textSize(20);
-  text('value: ' + serialValue().toFixed(2), 44, 16);
-  fill(120, 130, 170);
-  text(hi.toFixed(0), 8, 24);
-  text(lo.toFixed(0), 8, height - 24);
+  fill(theme.muted);
+  textFont(theme.mono);
+  textAlign(RIGHT, TOP);
+  textSize(16);
+  text(hi.toFixed(0), pad + w - 21, top + 9);
+  textAlign(RIGHT, BOTTOM);
+  text(lo.toFixed(0), pad + w - 21, top + h - 9);
 }
